@@ -54,6 +54,12 @@ SourceArt/**/*.tga
 Binaries/*
 Plugins/*/Binaries/*
 
+# Starter Content and other Assets
+Content/Geometry/*
+Content/Mannequin/*
+Content/StarterContent/*
+Content/TopDownCPP/*
+
 # Builds
 Build/*
 
