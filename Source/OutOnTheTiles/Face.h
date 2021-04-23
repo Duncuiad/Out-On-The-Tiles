@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "Vertex.h"
-#include "HalfEdge.h"
 #include "Containers/List.h"
 
 #include "Math/Vector2D.h"
@@ -12,6 +10,10 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Face.generated.h"
+
+// - Forward declarations
+class UVertex; //#include "Vertex.h"
+class UHalfEdge; //#include "HalfEdge.h"
 
 /**
  * 
@@ -42,7 +44,7 @@ public:
 	int FaceType() const;
 
 	// Returns the position of the face's first vertex (i. e. the base vertex of the representative half-edge)
-	inline FVector2D getPosition() const { return this->rep->getBase()->getPosition(); }
+	FVector2D getPosition() const;
 
 	// Returns the 2D transform (rotation and scale only) of this face with respect to its "canonical form", where the representative half-edge corresponds to the vector (1,0)
 	FMatrix2x2 getTransform() const;

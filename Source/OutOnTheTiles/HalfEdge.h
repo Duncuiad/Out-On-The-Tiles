@@ -2,11 +2,13 @@
 
 #pragma once
 
-#include "Vertex.h"
-
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "HalfEdge.generated.h"
+
+// - Forward declarations
+class UVertex; //#include "Vertex.h"
+class UFace; //#include "Face.h"
 
 /**
  * A class for the half-edges (HE) in the tiling (stored as a half-edge mesh)
@@ -27,13 +29,18 @@ class OUTONTHETILES_API UHalfEdge : public UObject
 	// The corresponding Half-Edge on the same edge of the adjacent face, if present
 	UHalfEdge* opposite = nullptr;
 
+	// This half-edge's face
+	UFace* face;
+
 	// HE Color information to determine how this half-edge should be subdivided
 	bool blue;
 
 public:
 
+	// - get functions
 	inline UVertex* getBase() const { return this->base; }
 	inline UHalfEdge* getNext() const { return this->next; }
-	inline const bool isBlue() { return blue; };
+	inline UFace* getFace() const { return this->face; }
+	inline bool isBlue() const { return blue; };
 
 };

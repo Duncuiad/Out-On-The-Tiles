@@ -2,4 +2,5 @@
 
 
 #include "HalfEdge.h"
-
+#include "Vertex.h"
+#include "Face.h"

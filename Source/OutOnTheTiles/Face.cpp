@@ -2,6 +2,8 @@
 
 
 #include "Face.h"
+#include "Vertex.h"
+#include "HalfEdge.h"
 
 unsigned int UFace::Depth() const
 {
@@ -26,6 +28,11 @@ int UFace::FaceType() const
 	while (currentHE != this->rep);
 
 	return isTriangle ? -blueSum/2 : blueSum/2;
+}
+
+FVector2D UFace::getPosition() const
+{
+	return this->rep->getBase()->getPosition();
 }
 
 FMatrix2x2 UFace::getTransform() const
