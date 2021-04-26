@@ -5,6 +5,9 @@
 #include "Vertex.h"
 #include "HalfEdge.h"
 #include "Face.h"
+#include "Tile.h"
+
+#include "MEList.h"
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
@@ -25,12 +28,16 @@ class OUTONTHETILES_API UTileMesh : public UObject
 	static UTileMesh* instance;
 
 	// The list of vertices in the mesh
+	MEList<UVertex> vertices;
 
 	// The list of half-edges in the mesh
+	MEList<UHalfEdge> halfEdges;
 
 	// The list of faces in the mesh, except for tiles (see below)
+	MEList<UFace> faces;
 
 	// The list of tiles in the mesh, i. e. the maximally subdivided faces.
+	MEList<UTile> tiles;
 
 public:
 
@@ -43,5 +50,14 @@ public:
 	* However the best practice for this class will be to NEVER call NewObject on the class outside of its definition
 	*/
 	static UTileMesh* Instance();
+
+	// Selects which subdivision to apply to face. If face is actually a tile, it doesn't do anything
+	void Subdivide(UFace* face);
+
+	void SubdivideTriangle(UFace* triangle);
+
+	void SubdivideRedSquare(UFace* redSquare);
+
+	void SubdivideRedBlueSquare(UFace* rbSquare);
 	
 };

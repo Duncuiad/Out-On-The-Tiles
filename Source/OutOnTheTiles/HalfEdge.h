@@ -35,12 +35,29 @@ class OUTONTHETILES_API UHalfEdge : public UObject
 	// HE Color information to determine how this half-edge should be subdivided
 	bool blue;
 
+	// Each subdivision step subdivides each half-edge into to smaller half-edges, introducing a displaced midpoint vertex
+	UVertex* subMidpoint;
+
 public:
 
 	// - get functions
 	inline UVertex* getBase() const { return this->base; }
 	inline UHalfEdge* getNext() const { return this->next; }
 	inline UFace* getFace() const { return this->face; }
-	inline bool isBlue() const { return blue; };
+	inline bool isBlue() const { return this->blue; };
+
+	inline void ChangeColor() { this->blue = !this->blue; }
+
+	//UVertex* GetSubMidpoint();
+
+	// Sets the subdivision midpoint of the half-edge and of its opposite at the same time
+	inline void SetSubMidpoint(UVertex* calculatedSubMidpoint)
+	{
+		this->subMidpoint = calculatedSubMidpoint;
+		if (this->opposite)
+		{
+			this->opposite->subMidpoint = calculatedSubMidpoint;
+		}
+	}
 
 };

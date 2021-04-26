@@ -19,7 +19,7 @@ class OUTONTHETILES_API MEList
 
 public:
 	MEList() : list() {}
-	~MEList();
+	~MEList() {}
 
 private:
 

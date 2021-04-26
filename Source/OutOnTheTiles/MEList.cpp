@@ -3,10 +3,16 @@
 
 #include "MEList.h"
 
+/*
+TEMPLATE IMPLEMENTATION IS DONE IN THE HEADER FILE
+*/
+
+/*
 template<class T>
 MEList<T>::~MEList()
 {
 }
+*/
 
 /*
 template<class T>
