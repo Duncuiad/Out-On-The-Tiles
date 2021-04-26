@@ -8,6 +8,7 @@ MEList<T>::~MEList()
 {
 }
 
+/*
 template<class T>
 typename MEList<T>::MEIterator MEList<T>::begin()
 {
@@ -19,4 +20,4 @@ typename MEList<T>::MEIterator MEList<T>::end()
 {
 	return MEIterator();
 }
-
+*/
