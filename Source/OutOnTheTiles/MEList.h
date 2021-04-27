@@ -134,4 +134,11 @@ public:
 	{
 		list.Empty();
 	}
+
+	// True if the list is empty
+	inline bool IsEmpty() const
+	{
+		// Head is nullptr, if list is empty
+		return !((bool) this->list.GetHead());
+	}
 };

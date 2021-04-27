@@ -28,8 +28,14 @@ UTileMesh* UTileMesh::Instance()
 // should only be aware of itself and its components (as well as its hierarchy)
 void UTileMesh::Subdivide(UFace* face)
 {
+	if (face->IsSubdivided()) { return; }
+
 	unsigned int depth = face->Depth();
 
+	// If needed, subdivide the adjacent faces first
+	this->CondSubdAdjacentOf(face);
+
+	// Decide which subdivision to apply to the face, but only if it can be further subdivided
 	if (depth < MAX_SUBDIVISION_DEPTH)
 	{
 		int type = face->FaceType();
@@ -47,6 +53,32 @@ void UTileMesh::Subdivide(UFace* face)
 			this->SubdivideRedBlueSquare(face);
 		}
 	}
+}
+
+void UTileMesh::CondSubdAdjacentOf(UFace* face)
+{
+
+	UHalfEdge* currentHE = face->getRepresentative();
+
+	// iterate on the adjacent faces
+	do
+	{
+		//if the half-edge has an opposite, the subdivision doesn't need to propagate in that direction
+		if (!currentHE->IsInternal())
+		{
+			// if the half-edge doesnt't have a father (e. g. the face it lies on has no father face), it returns nullptr
+			UHalfEdge* fatherHEdge = currentHE->FindFatherHEdge();
+
+			if (fatherHEdge)
+			{
+				// propagate the subdivision to the adjacent face
+				this->Subdivide(fatherHEdge->getFace());
+			}
+		}
+
+		// go on to the next half-edge
+		currentHE = currentHE->getNext();
+	} while (currentHE != face->getRepresentative());
 }
 
 void UTileMesh::SubdivideTriangle(UFace* triangle)

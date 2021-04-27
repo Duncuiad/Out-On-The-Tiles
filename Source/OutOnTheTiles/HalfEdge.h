@@ -44,9 +44,14 @@ public:
 	inline UVertex* getBase() const { return this->base; }
 	inline UHalfEdge* getNext() const { return this->next; }
 	inline UFace* getFace() const { return this->face; }
-	inline bool isBlue() const { return this->blue; };
+	inline bool isBlue() const { return this->blue; }
+
+	// True if this half-edge has an opposite, false if it is instead on the border of its mesh (the submesh corresponding to the depth of the face it belongs to)
+	inline bool IsInternal() const { return (bool) this->opposite; }
 
 	inline void ChangeColor() { this->blue = !this->blue; }
+
+	UHalfEdge* FindFatherHEdge();
 
 	//UVertex* GetSubMidpoint();
 

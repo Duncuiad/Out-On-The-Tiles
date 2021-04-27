@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Containers/List.h"
+#include "MEList.h"
 
 #include "Math/Vector2D.h"
 #include "Math/TransformCalculus2D.h"
@@ -30,15 +30,21 @@ class OUTONTHETILES_API UFace : public UObject
 	UFace* father;
 
 	// Pointers to the face's children in the subdivision tree
-	TDoubleLinkedList<UFace*> children;
+	MEList<UFace*> children;
 
 public:
 
 	// Class initializer (use after a call of NewObject<Uface>)
 	inline void InitFace(UHalfEdge& representative, UFace& fatherFace) { this->rep = &representative; this->father = &fatherFace; }
 
+	// Get members
+	inline UFace* getFather() const { return this->father; }
+	inline UHalfEdge* getRepresentative() const { return this->rep; }
+
 	// Returns the depth of this face in the subdivision tree. Root has depth one (for calculation purposes). Children have their father's depth +1
 	unsigned int Depth() const;
+
+	inline bool IsSubdivided() const { return !this->children.IsEmpty(); }
 
 	// Returns -1 if the face is a triangle, 0 if it is a red square and 1 if it is a red-blue square
 	int FaceType() const;

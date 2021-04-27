@@ -54,6 +54,12 @@ public:
 	// Selects which subdivision to apply to face. If face is actually a tile, it doesn't do anything
 	void Subdivide(UFace* face);
 
+private:
+
+	// Check if the adjacent faces are sufficiently subdivided, otherwise subdivide them first
+	// Stands for "conditionally subdivide adjacent faces of:"
+	void CondSubdAdjacentOf(UFace* face);
+
 	void SubdivideTriangle(UFace* triangle);
 
 	void SubdivideRedSquare(UFace* redSquare);
