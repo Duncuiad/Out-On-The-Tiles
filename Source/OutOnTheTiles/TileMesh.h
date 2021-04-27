@@ -9,6 +9,9 @@
 
 #include "MEList.h"
 
+#include "Math/Vector2D.h"
+#include "Math/TransformCalculus2D.h"
+
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "TileMesh.generated.h"
@@ -28,21 +31,28 @@ class OUTONTHETILES_API UTileMesh : public UObject
 	static UTileMesh* instance;
 
 	// The list of vertices in the mesh
-	MEList<UVertex> vertices;
+	MEList<UVertex*> vertices;
 
 	// The list of half-edges in the mesh
-	MEList<UHalfEdge> halfEdges;
+	MEList<UHalfEdge*> halfEdges;
 
 	// The list of faces in the mesh, except for tiles (see below)
-	MEList<UFace> faces;
+	MEList<UFace*> faces;
 
 	// The list of tiles in the mesh, i. e. the maximally subdivided faces.
-	MEList<UTile> tiles;
+	MEList<UTile*> tiles;
 
 public:
 
 	// This is the value that lengths contract by at each subsequent subdivision
 	const static float INFLATION_CONSTANT; // sqrt(2.f + sqrt(3.f))
+	
+	// Variables for linear algebra on the mesh elements
+	const static float COS_15_DEG; // sqrt(2.f + sqrt(3.f)) / 2.f
+	const static float SIN_15_DEG; // sqrt(2.f - sqrt(3.f)) / 2.f
+	// Rotation matrix used to determine subdivision mid-points of half-edges
+	const static FMatrix2x2 ELEM_ROT_MAT; // (COS_15_DEG, -SIN_15_DEG; COS_15_DEG, SIN_15_DEG)
+	const static FMatrix2x2 TR_ELEM_ROT_MAT; // (COS_15_DEG, SIN_15_DEG; COS_15_DEG, -SIN_15_DEG)
 
 	/** 
 	* Returns a pointer to the unique instance of this class if present. In case it isn't, it first creates it (lazy initialization)
@@ -57,8 +67,10 @@ public:
 private:
 
 	// Check if the adjacent faces are sufficiently subdivided, otherwise subdivide them first
-	// Stands for "conditionally subdivide adjacent faces of:"
+	// Stands for "conditionally subdivide (father-)adjacent faces of:"
 	void CondSubdAdjacentOf(UFace* face);
+
+	UVertex* GenerateSubMidpoint(UHalfEdge* halfEdge);
 
 	void SubdivideTriangle(UFace* triangle);
 

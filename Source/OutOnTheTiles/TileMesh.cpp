@@ -6,8 +6,12 @@
 // Initialize the pointer to the unique instance of this class to be null (Singleton pattern)
 UTileMesh* UTileMesh::instance = nullptr;
 
-// Initialization of the inflation constant's value
+// Initialization of the inflation constant's value and other constants
 const float UTileMesh::INFLATION_CONSTANT = sqrt(2.f + sqrt(3.f));
+const float UTileMesh::COS_15_DEG = sqrt(2.f + sqrt(3.f)) / 2.f;
+const float UTileMesh::SIN_15_DEG = sqrt(2.f - sqrt(3.f)) / 2.f;
+const FMatrix2x2 UTileMesh::ELEM_ROT_MAT(COS_15_DEG, -SIN_15_DEG, COS_15_DEG, SIN_15_DEG);
+const FMatrix2x2 UTileMesh::TR_ELEM_ROT_MAT(COS_15_DEG, SIN_15_DEG, COS_15_DEG, -SIN_15_DEG);
 
 UTileMesh* UTileMesh::Instance()
 {
@@ -71,14 +75,47 @@ void UTileMesh::CondSubdAdjacentOf(UFace* face)
 
 			if (fatherHEdge)
 			{
-				// propagate the subdivision to the adjacent face
-				this->Subdivide(fatherHEdge->getFace());
+
+				// if it's not on the world border
+				if (fatherHEdge->IsInternal())
+				{
+					// propagate the subdivision to the adjacent face
+					this->Subdivide(fatherHEdge->getOpposite()->getFace());
+				}
 			}
 		}
 
 		// go on to the next half-edge
 		currentHE = currentHE->getNext();
 	} while (currentHE != face->getRepresentative());
+}
+
+UVertex* UTileMesh::GenerateSubMidpoint(UHalfEdge* halfEdge)
+{
+	UVertex* subMidpoint;
+
+	// Create subMidpoint
+	UPROPERTY()
+	TSubclassOf<UVertex> Vertex;
+	subMidpoint = NewObject<UVertex>(nullptr, Vertex->GetFName(), RF_NoFlags, Vertex.GetDefaultObject());
+
+	// Get the vector corresponding to the halfEdge
+	FVector2D HEDisplacement = halfEdge->getNext()->getBase()->getPosition() - halfEdge->getBase()->getPosition();
+
+	// Rotate based on half-edge color
+	FVector2D position = halfEdge->isBlue() ? UTileMesh::ELEM_ROT_MAT.TransformVector(HEDisplacement) : UTileMesh::TR_ELEM_ROT_MAT.TransformVector(HEDisplacement);
+
+	// Scale and translate to get position of subMidpoint
+	position /= UTileMesh::INFLATION_CONSTANT;
+	position += halfEdge->getBase()->getPosition();
+
+	// Initialize the vertex
+	subMidpoint->setPosition(position);
+
+	this->vertices.Append(subMidpoint);
+	halfEdge->SetSubMidpoint(subMidpoint);
+
+	return subMidpoint;
 }
 
 void UTileMesh::SubdivideTriangle(UFace* triangle)

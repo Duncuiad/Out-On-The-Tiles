@@ -6,18 +6,6 @@
 #include "Face.h"
 #include "TileMesh.h"
 
-/*
-UVertex* UHalfEdge::GetSubMidpoint()
-{
-	if (!this->subMidpoint)
-	{
-		TileMesh.Instance()->
-	}
-
-	return this->subMidpoint;
-}
-*/
-
 UHalfEdge* UHalfEdge::FindFatherHEdge()
 {
 	UHalfEdge* fatherHEdge = nullptr;
@@ -47,4 +35,13 @@ UHalfEdge* UHalfEdge::FindFatherHEdge()
 	}
 
 	return fatherHEdge;
+}
+
+void UHalfEdge::ApplyEndpointMarking()
+{
+	if (this->getEnd()->isMarked())
+	{
+		this->ChangeColor();
+		this->getNext()->ChangeColor();
+	}
 }

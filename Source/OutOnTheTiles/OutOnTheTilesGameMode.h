@@ -13,6 +13,8 @@ class AOutOnTheTilesGameMode : public AGameModeBase
 
 public:
 	AOutOnTheTilesGameMode();
+
+	void BeginPlay();
 };
 
 

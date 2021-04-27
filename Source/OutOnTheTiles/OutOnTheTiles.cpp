@@ -6,4 +6,3 @@
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, OutOnTheTiles, "OutOnTheTiles" );
 
 DEFINE_LOG_CATEGORY(LogOutOnTheTiles)
- 

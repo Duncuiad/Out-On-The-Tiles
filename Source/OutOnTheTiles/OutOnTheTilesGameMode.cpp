@@ -16,4 +16,12 @@ AOutOnTheTilesGameMode::AOutOnTheTilesGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+}
+
+void AOutOnTheTilesGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	UE_LOG(LogTemp, Warning, TEXT("HI, IT'S ME!"));
 }

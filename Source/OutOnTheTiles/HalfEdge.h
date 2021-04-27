@@ -36,24 +36,31 @@ class OUTONTHETILES_API UHalfEdge : public UObject
 	bool blue;
 
 	// Each subdivision step subdivides each half-edge into to smaller half-edges, introducing a displaced midpoint vertex
-	UVertex* subMidpoint;
+	UVertex* subMidpoint = nullptr;
 
 public:
 
 	// - get functions
 	inline UVertex* getBase() const { return this->base; }
 	inline UHalfEdge* getNext() const { return this->next; }
+	inline UVertex* getEnd() const { return this->getNext()->getBase(); }
+	inline UHalfEdge* getOpposite() const { return this->opposite; }
 	inline UFace* getFace() const { return this->face; }
 	inline bool isBlue() const { return this->blue; }
+	inline UVertex* GetSubMidpoint() const { return this->subMidpoint; }
 
 	// True if this half-edge has an opposite, false if it is instead on the border of its mesh (the submesh corresponding to the depth of the face it belongs to)
 	inline bool IsInternal() const { return (bool) this->opposite; }
 
 	inline void ChangeColor() { this->blue = !this->blue; }
 
+	// EDIT COMMENT
 	UHalfEdge* FindFatherHEdge();
 
-	//UVertex* GetSubMidpoint();
+	// If a vertex is marked, all of its incident half-edges should have opposite color to their default state
+	// This function is called by any half-edge ending in the vertex to be checked, and if such vertex is marked it changes color to itself and its next half-edge
+	// (which is always a half-edge starting from the checked vertex)
+	void ApplyEndpointMarking();
 
 	// Sets the subdivision midpoint of the half-edge and of its opposite at the same time
 	inline void SetSubMidpoint(UVertex* calculatedSubMidpoint)
