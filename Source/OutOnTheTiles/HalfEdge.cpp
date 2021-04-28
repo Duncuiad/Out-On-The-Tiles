@@ -37,6 +37,18 @@ UHalfEdge* UHalfEdge::FindFatherHEdge()
 	return fatherHEdge;
 }
 
+UHalfEdge* UHalfEdge::FindFirstRedFromMe()
+{
+	UHalfEdge* currentHE = this;
+
+	while (currentHE->isBlue())
+	{
+		currentHE = currentHE->getNext();
+	}
+
+	return currentHE;
+}
+
 void UHalfEdge::ApplyEndpointMarking()
 {
 	if (this->getEnd()->isMarked())
@@ -44,4 +56,15 @@ void UHalfEdge::ApplyEndpointMarking()
 		this->ChangeColor();
 		this->getNext()->ChangeColor();
 	}
+}
+
+void UHalfEdge::CacheSubdivisionInformation(UHalfEdge* firstChild, UHalfEdge* secondChild)
+{
+	if (!this->opposite)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Error, UHalfEdge::CacheSubdivisionInformation: Opposite doesn't exist!"));
+		return;
+	}
+	this->cachedChild = firstChild;
+	this->opposite->cachedChild = secondChild;
 }

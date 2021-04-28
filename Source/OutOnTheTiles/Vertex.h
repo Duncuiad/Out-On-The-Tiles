@@ -39,6 +39,11 @@ public:
 	inline FVector2D getPosition() const { return this->position; }
 	inline void setPosition(float newX, float newY) { this->position = FVector2D(newX, newY); }
 	inline void setPosition(const FVector2D& newPosition) { this->position = FVector2D(newPosition); }
+
+	/**
+	* Determine the vertex's marking based on its position
+	*/
+	void DetermineMarking();
 	
 
 };

@@ -35,8 +35,13 @@ class OUTONTHETILES_API UHalfEdge : public UObject
 	// HE Color information to determine how this half-edge should be subdivided
 	bool blue;
 
-	// Each subdivision step subdivides each half-edge into to smaller half-edges, introducing a displaced midpoint vertex
+	// Each subdivision step subdivides each half-edge into smaller half-edges, introducing a displaced midpoint vertex
 	UVertex* subMidpoint = nullptr;
+
+	// If this edge is subdivided before its opposite, it stores its first child
+	// If its opposite is subdivided before itself, it stores the opposite of its first child
+	// This ensures that memory is not wasted, because the information about the opposites of the children of this half-edge can all be retrieved form cachedChild and opposite->cachedChild
+	UHalfEdge* cachedChild = nullptr;
 
 public:
 
@@ -48,14 +53,50 @@ public:
 	inline UFace* getFace() const { return this->face; }
 	inline bool isBlue() const { return this->blue; }
 	inline UVertex* GetSubMidpoint() const { return this->subMidpoint; }
+	inline UHalfEdge* GetCachedChild() const { return this->cachedChild; }
 
 	// True if this half-edge has an opposite, false if it is instead on the border of its mesh (the submesh corresponding to the depth of the face it belongs to)
 	inline bool IsInternal() const { return (bool) this->opposite; }
 
+	inline void Init(UVertex* baseVertex, bool shouldBeBlue)
+	{
+		this->base = baseVertex;
+		this->blue = shouldBeBlue;
+	}
+
 	inline void ChangeColor() { this->blue = !this->blue; }
+
+	// Sets this and otherHE as mutual opposites
+	inline void PairOpposites(UHalfEdge* otherHE)
+	{
+		this->opposite = otherHE;
+		otherHE->opposite = this;
+	}
+
+	// Sets the face this half-edge is part of
+	inline void SetFace(UFace* aFace) { this->face = aFace; }
+
+	// Cyclically set next half-edges
+	inline static void MakeCycle(UHalfEdge* first, UHalfEdge* second, UHalfEdge* third, UHalfEdge* last = nullptr)
+	{
+		first->next = second;
+		second->next = third;
+
+		if (last)
+		{
+			third->next = last;
+			last->next = first;
+		}
+		else {
+			third->next = first;
+		}
+	}
 
 	// EDIT COMMENT
 	UHalfEdge* FindFatherHEdge();
+
+	// EDIT COMMENT
+	UHalfEdge* FindFirstRedFromMe();
 
 	// If a vertex is marked, all of its incident half-edges should have opposite color to their default state
 	// This function is called by any half-edge ending in the vertex to be checked, and if such vertex is marked it changes color to itself and its next half-edge
@@ -71,5 +112,7 @@ public:
 			this->opposite->subMidpoint = calculatedSubMidpoint;
 		}
 	}
+
+	void CacheSubdivisionInformation(UHalfEdge* firstChild, UHalfEdge* secondChild);
 
 };

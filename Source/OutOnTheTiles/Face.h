@@ -35,7 +35,15 @@ class OUTONTHETILES_API UFace : public UObject
 public:
 
 	// Class initializer (use after a call of NewObject<Uface>)
-	inline void InitFace(UHalfEdge& representative, UFace& fatherFace) { this->rep = &representative; this->father = &fatherFace; }
+	inline void Init(UFace* fatherFace, UHalfEdge* representative)
+	{
+		if (fatherFace)
+		{
+			fatherFace->children.Append(this);
+		}
+		this->father = fatherFace;
+		this->rep = representative;
+	}
 
 	// Get members
 	inline UFace* getFather() const { return this->father; }

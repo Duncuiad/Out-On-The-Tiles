@@ -70,7 +70,13 @@ private:
 	// Stands for "conditionally subdivide (father-)adjacent faces of:"
 	void CondSubdAdjacentOf(UFace* face);
 
+	UVertex* NewVertexAt(const FVector2D& position);
+
 	UVertex* GenerateSubMidpoint(UHalfEdge* halfEdge);
+
+	UHalfEdge* NewHalfEdgeAt(UVertex* baseVertex, bool shouldBeBlue);
+
+	UFace* NewFace(UFace* father, UHalfEdge* candidateRepresentative);
 
 	void SubdivideTriangle(UFace* triangle);
 
