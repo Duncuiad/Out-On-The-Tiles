@@ -28,7 +28,7 @@ class OUTONTHETILES_API UTileMesh : public UObject
 	const static int MAX_SUBDIVISION_DEPTH = 8;
 
 	// Pointer to the unique instance of this class (Singleton pattern)
-	static UTileMesh* instance;
+	static UPROPERTY() UTileMesh* instance;
 
 	// The list of vertices in the mesh
 	MEList<UVertex*> vertices;
@@ -60,6 +60,8 @@ public:
 	* However the best practice for this class will be to NEVER call NewObject on the class outside of its definition
 	*/
 	static UTileMesh* Instance();
+
+	void BuildFirstFaceTriangle(float sideLength);
 
 	// Selects which subdivision to apply to face. If face is actually a tile, it doesn't do anything
 	void Subdivide(UFace* face);

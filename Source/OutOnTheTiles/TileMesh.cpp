@@ -2,6 +2,8 @@
 
 
 #include "TileMesh.h"
+#include <sstream>
+#include <string>
 
 // Initialize the pointer to the unique instance of this class to be null (Singleton pattern)
 UTileMesh* UTileMesh::instance = nullptr;
@@ -15,15 +17,45 @@ const FMatrix2x2 UTileMesh::TR_ELEM_ROT_MAT(COS_15_DEG, SIN_15_DEG, COS_15_DEG, 
 
 UTileMesh* UTileMesh::Instance()
 {
-	if (instance == nullptr)
+	if (UTileMesh::instance == nullptr)
 	{
 		UPROPERTY()
 		TSubclassOf<UTileMesh> TileMesh;
-
-		instance = NewObject<UTileMesh>(nullptr, TileMesh->GetFName(), RF_NoFlags, TileMesh.GetDefaultObject());
+		UE_LOG(LogTemp, Warning, TEXT("ALMOST BUILDING TILEMESH"));
+		//UTileMesh::instance = NewObject<UTileMesh>(world, TileMesh->GetFName(), RF_NoFlags, TileMesh.GetDefaultObject());
+		UTileMesh::instance = NewObject<UTileMesh>();
 	}
+	/*
+	std::stringstream ss;
+	ss << instance;
+	std::string str = ss.str();
+	UE_LOG(LogTemp, Warning, TEXT("\n%s\n"), str.c_str());
+	*/
+	return UTileMesh::instance;
+}
 
-	return instance;
+void UTileMesh::BuildFirstFaceTriangle(float sideLength)
+{
+	UVertex* vert[3];
+	UHalfEdge* hedges[3];
+	UFace* face;
+
+	vert[0] = this->NewVertexAt(FVector2D(0.f, 0.f));
+	vert[1] = this->NewVertexAt(FVector2D(sideLength, 0.f));
+	vert[2] = this->NewVertexAt(FVector2D(sideLength / 2.f, sideLength / 2.f * sqrt(3.f)));
+
+	hedges[0] = this->NewHalfEdgeAt(vert[0], false);
+	hedges[1] = this->NewHalfEdgeAt(vert[1], true);
+	hedges[2] = this->NewHalfEdgeAt(vert[2], true);
+
+	UHalfEdge::MakeCycle(hedges[0], hedges[1], hedges[2]);
+
+	face = this->NewFace(nullptr, hedges[0]);
+
+	for (int i = 0; i < 3; i++)
+	{
+		hedges[i]->SetFace(face);
+	}
 }
 
 // Selects which subdivision to apply to face. If face is actually a tile, it doesn't do anything
@@ -96,8 +128,9 @@ UVertex* UTileMesh::NewVertexAt(const FVector2D& position)
 
 	// Create subMidpoint
 	UPROPERTY()
-		TSubclassOf<UVertex> Vertex;
-	newVertex = NewObject<UVertex>(nullptr, Vertex->GetFName(), RF_NoFlags, Vertex.GetDefaultObject());
+	TSubclassOf<UVertex> Vertex;
+	//newVertex = NewObject<UVertex>(this, Vertex->GetFName(), RF_NoFlags, Vertex.GetDefaultObject());
+	newVertex = NewObject<UVertex>(this);
 
 	// Initialize the vertex
 	newVertex->setPosition(position);
@@ -139,7 +172,8 @@ UHalfEdge* UTileMesh::NewHalfEdgeAt(UVertex* baseVertex, bool shouldBeBlue)
 	// Create subMidpoint
 	UPROPERTY()
 	TSubclassOf<UHalfEdge> HalfEdge;
-	newHalfEdge = NewObject<UHalfEdge>(nullptr, HalfEdge->GetFName(), RF_NoFlags, HalfEdge.GetDefaultObject());
+	//newHalfEdge = NewObject<UHalfEdge>(this, HalfEdge->GetFName(), RF_NoFlags, HalfEdge.GetDefaultObject());
+	newHalfEdge = NewObject<UHalfEdge>(this);
 
 	newHalfEdge->Init(baseVertex, shouldBeBlue);
 
@@ -152,7 +186,8 @@ UFace* UTileMesh::NewFace(UFace* father, UHalfEdge* candidateRepresentative)
 	// Create subMidpoint
 	UPROPERTY()
 		TSubclassOf<UFace> Face;
-	newFace = NewObject<UFace>(nullptr, Face->GetFName(), RF_NoFlags, Face.GetDefaultObject());
+	//newFace = NewObject<UFace>(this, Face->GetFName(), RF_NoFlags, Face.GetDefaultObject());
+	newFace = NewObject<UFace>(this);
 
 	// candidateRepresentative could be any of the face's half-edges
 	// This part makes sure that the correct representative is picked
