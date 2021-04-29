@@ -113,7 +113,7 @@ public:
 	// Returns an iterator past the end of the list
 	inline MEIterator end() const
 	{
-		return MEIterator(this->list.GetTail()->GetNextNode());
+		return this->IsEmpty() ? this->begin() : MEIterator(this->list.GetTail()->GetNextNode());
 	}
 
 	// Appends an element at the end of the list

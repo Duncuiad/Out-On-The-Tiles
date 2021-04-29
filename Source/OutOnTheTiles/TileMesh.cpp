@@ -90,6 +90,41 @@ void UTileMesh::Subdivide(UFace* face)
 	}
 }
 
+void UTileMesh::GetInfo()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Number of vertices: %d"), this->vertices.Size());
+	UE_LOG(LogTemp, Warning, TEXT("Number of half-edges: %d"), this->halfEdges.Size());
+	UE_LOG(LogTemp, Warning, TEXT("Number of faces: %d"), this->faces.Size());
+	UE_LOG(LogTemp, Warning, TEXT("Number of tiles: %d"), this->tiles.Size());
+
+	/*
+	for (auto iterator = this->faces.begin(); iterator != this->faces.end(); ++iterator)
+	{
+		
+		
+		UE_LOG(LogTemp, Warning, TEXT("Un passo"));
+		if (IsValid(*iterator))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Face depth: %d"), (*iterator)->Depth());
+		}
+		else
+		{
+			std::stringstream ss;
+			ss << *iterator;
+			std::string str = ss.str();
+			UE_LOG(LogTemp, Warning, TEXT("\nIndirizzo non valido: %s\n"), str.c_str());
+		}
+		
+	}
+	*/
+	
+	for (UFace* face : this->faces)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Face depth: %d"), face->Depth());
+	}
+	
+}
+
 void UTileMesh::CondSubdAdjacentOf(UFace* face)
 {
 

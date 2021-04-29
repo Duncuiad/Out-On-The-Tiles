@@ -74,13 +74,7 @@ public:
 	void Subdivide(UFace* face);
 
 	// Prints the number of elements in each of TileMesh's lists
-	inline void GetInfo()
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Number of vertices: %d"), this->vertices.Size());
-		UE_LOG(LogTemp, Warning, TEXT("Number of half-edges: %d"), this->halfEdges.Size());
-		UE_LOG(LogTemp, Warning, TEXT("Number of faces: %d"), this->faces.Size());
-		UE_LOG(LogTemp, Warning, TEXT("Number of tiles: %d"), this->tiles.Size());
-	}
+	void GetInfo();
 
 private:
 
