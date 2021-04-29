@@ -107,32 +107,32 @@ public:
 	// Returns an iterator to the beginning of the list
 	inline MEIterator begin() const
 	{
-		return MEIterator(this->GetHead());
+		return MEIterator(this->list.GetHead());
 	}
 
 	// Returns an iterator past the end of the list
 	inline MEIterator end() const
 	{
-		return MEIterator(this->GetTail()->GetNextNode());
+		return MEIterator(this->list.GetTail()->GetNextNode());
 	}
 
 	// Appends an element at the end of the list
 	inline void Append(const T& element)
 	{
-		list.AddTail(element);
+		this->list.AddTail(element);
 	}
 
 	// Appends otherList to the end of this list
 	inline void Append(const MEList& otherList)
 	{
 		otherList.AddHead(list.GetTail());
-		list.AddTail(otherList.GetHead());
+		this->list.AddTail(otherList.GetHead());
 	}
 
 	// Removes all elements from the list
 	inline void Empty()
 	{
-		list.Empty();
+		this->list.Empty();
 	}
 
 	// True if the list is empty
@@ -140,5 +140,11 @@ public:
 	{
 		// Head is nullptr, if list is empty
 		return !((bool) this->list.GetHead());
+	}
+
+	// Returns the number of elements in the list
+	inline int Size() const
+	{
+		return this->list.Num();
 	}
 };

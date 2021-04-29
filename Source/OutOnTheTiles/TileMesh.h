@@ -28,19 +28,20 @@ class OUTONTHETILES_API UTileMesh : public UObject
 	const static int MAX_SUBDIVISION_DEPTH = 8;
 
 	// Pointer to the unique instance of this class (Singleton pattern)
-	static UPROPERTY() UTileMesh* instance;
+	/* BROKEN: Unreal doesn't support static UObject members */
+	//static UPROPERTY() UTileMesh* instance;
 
 	// The list of vertices in the mesh
-	MEList<UVertex*> vertices;
+	MEList<UPROPERTY() UVertex*> vertices;
 
 	// The list of half-edges in the mesh
-	MEList<UHalfEdge*> halfEdges;
+	MEList<UPROPERTY() UHalfEdge*> halfEdges;
 
 	// The list of faces in the mesh, except for tiles (see below)
-	MEList<UFace*> faces;
+	MEList<UPROPERTY() UFace*> faces;
 
 	// The list of tiles in the mesh, i. e. the maximally subdivided faces.
-	MEList<UTile*> tiles;
+	MEList<UPROPERTY() UTile*> tiles;
 
 public:
 
@@ -59,12 +60,27 @@ public:
 	* Note: this is kind of futile, since I can't make the default constructor protected (it has to be accessed by the factory method NewObject)
 	* However the best practice for this class will be to NEVER call NewObject on the class outside of its definition
 	*/
-	static UTileMesh* Instance();
+	/* BROKEN: Unreal doesn't support static UObject members */
+	//static UTileMesh* Instance();
+
+	inline UFace* GetRootFace()
+	{
+		return *(this->faces.begin());
+	}
 
 	void BuildFirstFaceTriangle(float sideLength);
 
 	// Selects which subdivision to apply to face. If face is actually a tile, it doesn't do anything
 	void Subdivide(UFace* face);
+
+	// Prints the number of elements in each of TileMesh's lists
+	inline void GetInfo()
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Number of vertices: %d"), this->vertices.Size());
+		UE_LOG(LogTemp, Warning, TEXT("Number of half-edges: %d"), this->halfEdges.Size());
+		UE_LOG(LogTemp, Warning, TEXT("Number of faces: %d"), this->faces.Size());
+		UE_LOG(LogTemp, Warning, TEXT("Number of tiles: %d"), this->tiles.Size());
+	}
 
 private:
 

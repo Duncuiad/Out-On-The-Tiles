@@ -6,7 +6,8 @@
 #include <string>
 
 // Initialize the pointer to the unique instance of this class to be null (Singleton pattern)
-UTileMesh* UTileMesh::instance = nullptr;
+/* BROKEN: Unreal doesn't support static UObject members */
+//UTileMesh* UTileMesh::instance = nullptr;
 
 // Initialization of the inflation constant's value and other constants
 const float UTileMesh::INFLATION_CONSTANT = sqrt(2.f + sqrt(3.f));
@@ -15,30 +16,27 @@ const float UTileMesh::SIN_15_DEG = sqrt(2.f - sqrt(3.f)) / 2.f;
 const FMatrix2x2 UTileMesh::ELEM_ROT_MAT(COS_15_DEG, -SIN_15_DEG, COS_15_DEG, SIN_15_DEG);
 const FMatrix2x2 UTileMesh::TR_ELEM_ROT_MAT(COS_15_DEG, SIN_15_DEG, COS_15_DEG, -SIN_15_DEG);
 
+/* BROKEN: Unreal doesn't support static UObject members */
+/*
 UTileMesh* UTileMesh::Instance()
 {
 	if (UTileMesh::instance == nullptr)
 	{
-		UPROPERTY()
-		TSubclassOf<UTileMesh> TileMesh;
-		UE_LOG(LogTemp, Warning, TEXT("ALMOST BUILDING TILEMESH"));
+		//UPROPERTY()
+		//TSubclassOf<UTileMesh> TileMesh;
+		UE_LOG(LogTemp, Warning, TEXT("BUILDING TILEMESH FOR THE FIRST TIME"));
 		//UTileMesh::instance = NewObject<UTileMesh>(world, TileMesh->GetFName(), RF_NoFlags, TileMesh.GetDefaultObject());
 		UTileMesh::instance = NewObject<UTileMesh>();
 	}
-	/*
-	std::stringstream ss;
-	ss << instance;
-	std::string str = ss.str();
-	UE_LOG(LogTemp, Warning, TEXT("\n%s\n"), str.c_str());
-	*/
 	return UTileMesh::instance;
 }
+*/
 
 void UTileMesh::BuildFirstFaceTriangle(float sideLength)
 {
-	UVertex* vert[3];
-	UHalfEdge* hedges[3];
-	UFace* face;
+	UPROPERTY() UVertex* vert[3];
+	UPROPERTY() UHalfEdge* hedges[3];
+	UPROPERTY() UFace* face;
 
 	vert[0] = this->NewVertexAt(FVector2D(0.f, 0.f));
 	vert[1] = this->NewVertexAt(FVector2D(sideLength, 0.f));
@@ -64,6 +62,7 @@ void UTileMesh::BuildFirstFaceTriangle(float sideLength)
 // should only be aware of itself and its components (as well as its hierarchy)
 void UTileMesh::Subdivide(UFace* face)
 {
+
 	if (face->IsSubdivided()) { return; }
 
 	unsigned int depth = face->Depth();
@@ -94,7 +93,7 @@ void UTileMesh::Subdivide(UFace* face)
 void UTileMesh::CondSubdAdjacentOf(UFace* face)
 {
 
-	UHalfEdge* currentHE = face->getRepresentative();
+	UPROPERTY() UHalfEdge* currentHE = face->getRepresentative();
 
 	// iterate on the adjacent faces
 	do
@@ -124,11 +123,11 @@ void UTileMesh::CondSubdAdjacentOf(UFace* face)
 
 UVertex* UTileMesh::NewVertexAt(const FVector2D& position)
 {
-	UVertex* newVertex;
 
-	// Create subMidpoint
-	UPROPERTY()
-	TSubclassOf<UVertex> Vertex;
+	UPROPERTY() UVertex* newVertex;
+
+	//UPROPERTY()
+	//TSubclassOf<UVertex> Vertex;
 	//newVertex = NewObject<UVertex>(this, Vertex->GetFName(), RF_NoFlags, Vertex.GetDefaultObject());
 	newVertex = NewObject<UVertex>(this);
 
@@ -146,7 +145,7 @@ UVertex* UTileMesh::NewVertexAt(const FVector2D& position)
 
 UVertex* UTileMesh::GenerateSubMidpoint(UHalfEdge* halfEdge)
 {
-	UVertex* subMidpoint;
+	UPROPERTY() UVertex* subMidpoint;
 
 	// Get the vector corresponding to the halfEdge
 	FVector2D HEDisplacement = halfEdge->getNext()->getBase()->getPosition() - halfEdge->getBase()->getPosition();
@@ -168,24 +167,26 @@ UVertex* UTileMesh::GenerateSubMidpoint(UHalfEdge* halfEdge)
 
 UHalfEdge* UTileMesh::NewHalfEdgeAt(UVertex* baseVertex, bool shouldBeBlue)
 {
-	UHalfEdge* newHalfEdge;
-	// Create subMidpoint
-	UPROPERTY()
-	TSubclassOf<UHalfEdge> HalfEdge;
+	UPROPERTY() UHalfEdge* newHalfEdge;
+
+	//UPROPERTY()
+	//TSubclassOf<UHalfEdge> HalfEdge;
 	//newHalfEdge = NewObject<UHalfEdge>(this, HalfEdge->GetFName(), RF_NoFlags, HalfEdge.GetDefaultObject());
 	newHalfEdge = NewObject<UHalfEdge>(this);
 
 	newHalfEdge->Init(baseVertex, shouldBeBlue);
+
+	this->halfEdges.Append(newHalfEdge);
 
 	return newHalfEdge;
 }
 
 UFace* UTileMesh::NewFace(UFace* father, UHalfEdge* candidateRepresentative)
 {
-	UFace* newFace;
-	// Create subMidpoint
-	UPROPERTY()
-		TSubclassOf<UFace> Face;
+	UPROPERTY() UFace* newFace;
+
+	//UPROPERTY()
+	//TSubclassOf<UFace> Face;
 	//newFace = NewObject<UFace>(this, Face->GetFName(), RF_NoFlags, Face.GetDefaultObject());
 	newFace = NewObject<UFace>(this);
 
@@ -194,17 +195,20 @@ UFace* UTileMesh::NewFace(UFace* father, UHalfEdge* candidateRepresentative)
 	UHalfEdge* representative = candidateRepresentative->FindFirstRedFromMe();
 
 	newFace->Init(father, representative);
+
+	this->faces.Append(newFace);
+
 	return newFace;
 }
 
 void UTileMesh::SubdivideTriangle(UFace* triangle)
 {
-	UVertex* originalVertices[3];
-	UVertex* subMidpoints[3];
-	UHalfEdge* inner[4];
-	UHalfEdge* border[6];
-	UFace* newFaces[3];
-	UHalfEdge* currentHE = triangle->getRepresentative();
+	UPROPERTY() UVertex* originalVertices[3];
+	UPROPERTY() UVertex* subMidpoints[3];
+	UPROPERTY() UHalfEdge* inner[4];
+	UPROPERTY() UHalfEdge* border[6];
+	UPROPERTY() UFace* newFaces[3];
+	UPROPERTY() UHalfEdge* currentHE = triangle->getRepresentative();
 
 	// collect original vertices and generate new ones where needed
 	// then generate the border half-edges, permorming conditional pairing with opposites (see documentation [when available])
@@ -288,7 +292,7 @@ void UTileMesh::SubdivideTriangle(UFace* triangle)
 	// set the face field of each half-edge
 	for (int i = 0; i < 3; i++)
 	{
-		UHalfEdge* current = newFaces[i]->getRepresentative();
+		UPROPERTY() UHalfEdge* current = newFaces[i]->getRepresentative();
 		do
 		{
 			current->SetFace(newFaces[i]);
