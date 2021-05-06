@@ -77,7 +77,7 @@
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename C:/Users/Federico/Downloads/Out on the Tiles.png
+	filename ../Out on the Tiles.png
 
 \end_inset
 
@@ -105,8 +105,172 @@ Domain Tiles Generation [Geometry Processing]
 Square Triangle Tilings
 \end_layout
 
+\begin_layout Standard
+Square-triangle tilings allow for more varied geometry and therefore player
+ freedom in a sandbox context, when compared to all square or all triangle
+ regular tilings.
+ This variety however comes with challenges both in generating the actual
+ tiling and in the impossibility of random-accessing the single elements.
+\end_layout
+
+\begin_layout Standard
+The rules ensuring a proper plane-filling tiling can be explained by looking
+ at its vertices: squares account for 3/12 of a 360° angle, while equilateral
+ triangles account for 2/12.
+ This forces the set of faces surrounding a vertex to always contain an
+ even number of squares (i.
+ e.
+ 0, 2 or 4), with the rest made up by triangles.
+\end_layout
+
+\begin_layout Standard
+The most straightforward way to attempt at generating such a tiling would
+ be to use a Wave-Function-Collapse-like (WFC) algorithm, starting from
+ a single tile and then propagating the generation past the edges, while
+ using as rules the vertex completion right above.
+ This method however has a few problems when we intend for parts of the
+ world to be lazy-initialized, for instance generating a section of the
+ map only when the player comes in close enough proximity.
+ Heading far away from the spawn tile and then returning there from a different
+ direction would generate a loop of collapsed tiles whose interior is a
+ region that is very unlikely to admit a closable tiling, i.
+ e.
+ there may be regions of the map that can only be covered by tiles that
+ intersect ones previously generated.
+ A second issue with a WFC method is that linking tile collapse to player
+ exploration results in a non-deterministic world generation, which may
+ unnecessarily make other parts of the project less straighforward.
+\end_layout
+
+\begin_layout Standard
+These problems are shared by any method attempting to expand the tiling
+ past the border of previously determined tiles, so a flip in the overall
+ approach is required.
+\end_layout
+
+\begin_layout Standard
+To ensure compatibility with lazy initialization and deterministic world
+ generation, subdivision techniques provide a better approach: if we start
+ with one 
+\begin_inset Quotes eld
+\end_inset
+
+world tile
+\begin_inset Quotes erd
+\end_inset
+
+ (either a square or a triangle) and a set of rules on how to subdivide
+ each polygon as a collection of smaller polygons, ensuring that correct
+ adjacency between tiles carries on to the next iteration, it is possible
+ to apply those rules to the first tile, then to each of those it gets subdivide
+d into, and so on until an arbitrary degree of subdivision is reached.
+\end_layout
+
+\begin_layout Standard
+The power of this method relies on the fact that if we are able to keep
+ track of successive subdivisions in a 
+\begin_inset Quotes eld
+\end_inset
+
+subdivision tree
+\begin_inset Quotes erd
+\end_inset
+
+, then it is not necessary to completely subdivide the whole world at once:
+ if the player approaches areas of the world where the subdivision hasn't
+ yet reached its maximal degree, it is sufficient to apply subdivision to
+ an intermidiate node in the tree such that only regions in an immediate
+ neighbourhood of the player get completely subdivided.
+ This method thus allows for an adaptive resolution of the tilings that
+ leaves areas far away from the player only partially subdivided, affording
+ significant savings in memory occupancy and processing power.
+\end_layout
+
 \begin_layout Subsection
 Inflation Techniques
+\end_layout
+
+\begin_layout Standard
+Inflation techniques are subdivision algorithms that turn a given tiling
+ into another one with a higher resolution.
+ Their name comes from the fact that each subdivision step is usually preceeded
+ by an 
+\begin_inset Quotes eld
+\end_inset
+
+inflation
+\begin_inset Quotes erd
+\end_inset
+
+, i.
+ e.
+ a dilation of the plane, by a constant value (the 
+\begin_inset Quotes eld
+\end_inset
+
+inflation constant
+\begin_inset Quotes erd
+\end_inset
+
+) that is intrinsic to the particular technique being used.
+ The reason for such inflation is that it is usually desirable to ensure
+ that parent and child tilings share the same edge-length.
+ The inflation step however will never be performed in this project, since
+ subdivision will be done 
+\begin_inset Quotes eld
+\end_inset
+
+in place
+\begin_inset Quotes erd
+\end_inset
+
+, so that vertices in the parent tiling are ensured to be vertices in the
+ child as well.
+\end_layout
+
+\begin_layout Standard
+The inflation technique used by this project is an adaptation of the one
+ found in 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-1"
+literal "false"
+
+\end_inset
+
+, which sadly doesn't actually work.
+ Without diving into too much detail, the reason why the original technique
+ outlined by the paper doesn't work is that, as written, adjacency between
+ certain tiles is broken after the first full subdivision, making it impossible
+ to arbitrarily repeat the process.
+ My contribution consists in the introduction of a new family of triangles
+ (which I call 
+\begin_inset Quotes eld
+\end_inset
+
+true triangles
+\begin_inset Quotes erd
+\end_inset
+
+), a new property for edges (their coloring can be either 
+\begin_inset Quotes eld
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+false
+\begin_inset Quotes erd
+\end_inset
+
+) and in devising an update to each subdivision rule in order to account
+ for the introduction of such additions.
+ The details will become clear as soon as the actual rules are explained.
 \end_layout
 
 \begin_layout Subsection
@@ -130,14 +294,34 @@ Using the inflation tree for memory optimization
 \end_layout
 
 \begin_layout Section
-Domain Subdivision using Quad-Trees [Space Indexing]
+Domain Subdivision into blocks [Space Indexing]
 \end_layout
 
 \begin_layout Subsection
+A word on Quad/Octrees for voxel engines
+\end_layout
+
+\begin_layout Subsection
+Block Indexing
+\end_layout
+
+\begin_layout Subsubsection
 Squares
 \end_layout
 
+\begin_layout Subsubsection
+Triangles
+\end_layout
+
 \begin_layout Subsection
+Meshing
+\end_layout
+
+\begin_layout Subsubsection
+Squares
+\end_layout
+
+\begin_layout Subsubsection
 Triangles
 \end_layout
 
@@ -155,6 +339,23 @@ Using groups to generate symmetric meshes
 
 \begin_layout Subsection
 Example: Columns
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+label "ZeUn06"
+key "key-1"
+literal "false"
+
+\end_inset
+
+Xiangbing Zeng, Goran Ungar.
+ Inflation rules of square-triangle tilings: from approximants to dodecagonal
+ liquid quasicrystals.
+ Philosophical Magazine, Taylor & Francis, 2006, 86 (06-08), pp.1093- 1103.
+ ff10.1080/14786430500363148ff.
+ ffhal-00513624f
 \end_layout
 
 \end_body
