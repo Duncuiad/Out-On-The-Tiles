@@ -77,7 +77,7 @@
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename ../Out on the Tiles.png
+	filename Out on the Tiles.png
 
 \end_inset
 
@@ -98,7 +98,7 @@ Overview
 \end_layout
 
 \begin_layout Section
-Domain Tiles Generation [Geometry Processing]
+Domain Tiles Generation [Geometry Processing and Space Indexing]
 \end_layout
 
 \begin_layout Subsection
@@ -192,7 +192,7 @@ Inflation Techniques
 
 \begin_layout Standard
 Inflation techniques are subdivision algorithms that turn a given tiling
- into another one with a higher resolution.
+ into another with a higher resolution.
  Their name comes from the fact that each subdivision step is usually preceeded
  by an 
 \begin_inset Quotes eld
@@ -229,8 +229,12 @@ in place
 \end_layout
 
 \begin_layout Standard
-The inflation technique used by this project is an adaptation of the one
- found in 
+The inflation technique used by this project, which has an inflation constant
+ of 
+\begin_inset Formula $\gamma=\sqrt{2+\sqrt{3}}$
+\end_inset
+
+, is an adaptation of the one found in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "key-1"
@@ -270,7 +274,116 @@ false
 
 ) and in devising an update to each subdivision rule in order to account
  for the introduction of such additions.
- The details will become clear as soon as the actual rules are explained.
+ All of this will make sense as soon as you're through reading the actual
+ subdivision rules detailed below.
+\end_layout
+
+\begin_layout Standard
+To know how each polygon is subdivided it is necessary to distinguish two
+ different categories of triangles and of squares.
+ Both categories of triangles are made up of two blue edges and one red
+ edge, while squares are separated into the category of squares with four
+ red edges (
+\begin_inset Quotes eld
+\end_inset
+
+red squares
+\begin_inset Quotes erd
+\end_inset
+
+) and that of squares with two blue and two red edges (
+\begin_inset Quotes eld
+\end_inset
+
+red-blue squares
+\begin_inset Quotes erd
+\end_inset
+
+).
+ Keeping figure 
+\color red
+[insert picture]
+\color black
+ as reference, we can see that the color of the edges reflects how they
+ are split by performing a subdivision step: red edges turn into two edges
+ sharing a vertex located in the interior of the parent polygon, while the
+ corresponding vertex for blue edges falls outside the parent tile.
+ Coloring the edges is thus a way of knowing how they will be subdivided,
+ and each two adjacent tiles must share edges of opposite color, so that
+ adjacency can carry on to their children.
+\end_layout
+
+\begin_layout Standard
+We've seen how subdivision turns each edge into a pair of smaller edges
+ sharing a displaced midpoint, but to know how these edges have to be colored
+ (to be able to perform a new subdivision step) it is necessary to have
+ a little more information.
+ We will call 
+\begin_inset Quotes eld
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+ edges those which turn into edges of the same color and 
+\begin_inset Quotes eld
+\end_inset
+
+false
+\begin_inset Quotes erd
+\end_inset
+
+ edges those which swap colors when subdivided.
+ We can see that to ensure correct color-pairing to the children edges,
+ true edges must be paired with true edges between adjacent faces and the
+ same applies to false edges.
+ In summary, all of this means that each of a tile's edges has two properties,
+ and between adjacent tiles a true blue edge must be paired to a true red
+ edge, while a false red to a false blue.
+ 
+\end_layout
+
+\begin_layout Standard
+The two categories of triangles mentioned above are determined by this second
+ property of their edges: we'll call 
+\begin_inset Quotes eld
+\end_inset
+
+true
+\begin_inset Quotes erd
+\end_inset
+
+ triangles those whose edges are all true edges and 
+\begin_inset Quotes eld
+\end_inset
+
+false
+\begin_inset Quotes erd
+\end_inset
+
+ triangles those who only have false edges.
+ In the figures showing each polygon's subdivision, true triangles are identifie
+d by a black spot in the middle, while for squares, their true edges are
+ denoted by a black spot right next to the edge.
+ Clearly, true triangles can only be adjacent to either other true triangles
+ or any kind of square, but only through one of the square's true edges.
+ Of course, the exact opposite applies to false triangles.
+ Figure 
+\color red
+[insert picture]
+\color black
+ shows how this rule induces, onto the tiling, two distinct graphs, whose
+ nodes are the center point of the triangular tiles, and whose edges cross
+ squares from side to side in accordance to their 
+\begin_inset Quotes eld
+\end_inset
+
+trueness
+\begin_inset Quotes erd
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection

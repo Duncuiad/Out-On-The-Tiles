@@ -229,12 +229,8 @@ in place
 \end_layout
 
 \begin_layout Standard
-The inflation technique used by this project, which has an inflation constant
- of 
-\begin_inset Formula $\gamma=\sqrt{2+\sqrt{3}}$
-\end_inset
-
-, is an adaptation of the one found in 
+The inflation technique used by this project is an adaptation of the one
+ found in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "key-1"
@@ -363,9 +359,9 @@ false
 \end_inset
 
  triangles those who only have false edges.
- In the figures showing each polygon's subdivision, false triangles are
- identified by a black spot in the middle, while for squares, their false
- edges are denoted by a black spot right next to that edge.
+ In the figures showing each polygon's subdivision, true triangles are identifie
+d by a black spot in the middle, while for squares, their true edges are
+ denoted by a black spot right next to the edge.
  Clearly, true triangles can only be adjacent to either other true triangles
  or any kind of square, but only through one of the square's true edges.
  Of course, the exact opposite applies to false triangles.
@@ -373,17 +369,7 @@ false
 \color red
 [insert picture]
 \color black
- shows how this rule induces, onto the tiling, two distinct graphs, whose
- nodes are the center point of the triangular tiles, and whose edges cross
- squares from side to side in accordance to their 
-\begin_inset Quotes eld
-\end_inset
-
-trueness
-\begin_inset Quotes erd
-\end_inset
-
-.
+ shows how this rule induces two distinct 
 \end_layout
 
 \begin_layout Subsection
