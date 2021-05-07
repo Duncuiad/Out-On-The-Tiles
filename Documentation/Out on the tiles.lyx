@@ -6,6 +6,11 @@
 \origin unavailable
 \textclass article
 \use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package default
@@ -29,7 +34,17 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
-\use_hyperref false
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks false
+\pdf_pdfborder true
+\pdf_colorlinks false
+\pdf_backref false
+\pdf_pdfusetitle true
 \papersize default
 \use_geometry false
 \use_package amsmath 1
@@ -44,6 +59,7 @@
 \use_package undertilde 1
 \cite_engine basic
 \cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
@@ -57,8 +73,8 @@
 \end_index
 \secnumdepth 3
 \tocdepth 3
-\paragraph_separation indent
-\paragraph_indentation default
+\paragraph_separation skip
+\defskip bigskip
 \is_math_indent 0
 \math_numbering_side default
 \quotes_style english
@@ -187,7 +203,7 @@ subdivision tree
 \end_layout
 
 \begin_layout Subsection
-Inflation Techniques
+Inflation Techniques [The Method]
 \end_layout
 
 \begin_layout Standard
@@ -279,6 +295,72 @@ false
 \end_layout
 
 \begin_layout Standard
+\noindent
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Inflation Rule
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Inflation-Rule"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+centerline{
+\end_layout
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename Inflation Rule.svg
+	width 80page%
+
+\end_inset
+
+
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 To know how each polygon is subdivided it is necessary to distinguish two
  different categories of triangles and of squares.
  Both categories of triangles are made up of two blue edges and one red
@@ -300,14 +382,23 @@ red-blue squares
 \end_inset
 
 ).
- Keeping figure 
-\color red
-[insert picture]
+ Keeping figur
 \color black
- as reference, we can see that the color of the edges reflects how they
- are split by performing a subdivision step: red edges turn into two edges
- sharing a vertex located in the interior of the parent polygon, while the
- corresponding vertex for blue edges falls outside the parent tile.
+e 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Inflation-Rule"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ as reference, we can see that the color of the edges reflects the particular
+ way they are split by performing a subdivision step: red edges turn into
+ two edges sharing a vertex located in the interior of the parent polygon,
+ while the corresponding vertex for blue edges falls outside the parent
+ tile.
  Coloring the edges is thus a way of knowing how they will be subdivided,
  and each two adjacent tiles must share edges of opposite color, so that
  adjacency can carry on to their children.
@@ -368,7 +459,7 @@ false
  edges are denoted by a black spot right next to that edge.
  Clearly, true triangles can only be adjacent to either other true triangles
  or any kind of square, but only through one of the square's true edges.
- Of course, the exact opposite applies to false triangles.
+ At the same time, the exact opposite applies to false triangles.
  Figure 
 \color red
 [insert picture]
@@ -387,11 +478,11 @@ trueness
 \end_layout
 
 \begin_layout Subsection
-The Domain Mesh
+The Domain Mesh [The Data Structure]
 \end_layout
 
 \begin_layout Subsection
-Generating the Domain Mesh
+Generating the Domain Mesh [The Subdivision Algorithm]
 \end_layout
 
 \begin_layout Subsubsection
@@ -415,7 +506,7 @@ A word on Quad/Octrees for voxel engines
 \end_layout
 
 \begin_layout Subsection
-Block Indexing
+Block Indexing (without Quadtrees)
 \end_layout
 
 \begin_layout Subsubsection

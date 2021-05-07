@@ -4,8 +4,13 @@
 \begin_header
 \save_transient_properties true
 \origin unavailable
-\textclass article
+\textclass paper
 \use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
 \maintain_unincluded_children false
 \language english
 \language_package default
@@ -29,6 +34,7 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -44,6 +50,7 @@
 \use_package undertilde 1
 \cite_engine basic
 \cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
@@ -229,8 +236,12 @@ in place
 \end_layout
 
 \begin_layout Standard
-The inflation technique used by this project is an adaptation of the one
- found in 
+The inflation technique used by this project, which has an inflation constant
+ of 
+\begin_inset Formula $\gamma=\sqrt{2+\sqrt{3}}$
+\end_inset
+
+, is an adaptation of the one found in 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "key-1"
@@ -275,6 +286,52 @@ false
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Caption Unnumbered
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Inflation Rule"
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename Inflation Rule.svg
+	height 70theight%
+	BoundingBox 400bp 0bp 753bp 652bp
+	clip
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Color labeling will soon be fixed
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
 To know how each polygon is subdivided it is necessary to distinguish two
  different categories of triangles and of squares.
  Both categories of triangles are made up of two blue edges and one red
@@ -296,10 +353,18 @@ red-blue squares
 \end_inset
 
 ).
- Keeping figure 
-\color red
-[insert picture]
+ Keeping figur
 \color black
+e 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Inflation Rule"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
  as reference, we can see that the color of the edges reflects how they
  are split by performing a subdivision step: red edges turn into two edges
  sharing a vertex located in the interior of the parent polygon, while the
@@ -359,17 +424,27 @@ false
 \end_inset
 
  triangles those who only have false edges.
- In the figures showing each polygon's subdivision, true triangles are identifie
-d by a black spot in the middle, while for squares, their true edges are
- denoted by a black spot right next to the edge.
+ In the figures showing each polygon's subdivision, false triangles are
+ identified by a black spot in the middle, while for squares, their false
+ edges are denoted by a black spot right next to that edge.
  Clearly, true triangles can only be adjacent to either other true triangles
  or any kind of square, but only through one of the square's true edges.
- Of course, the exact opposite applies to false triangles.
+ At the same time, the exact opposite applies to false triangles.
  Figure 
 \color red
 [insert picture]
 \color black
- shows how this rule induces two distinct 
+ shows how this rule induces, onto the tiling, two distinct graphs, whose
+ nodes are the center point of the triangular tiles, and whose edges cross
+ squares from side to side in accordance to their 
+\begin_inset Quotes eld
+\end_inset
+
+trueness
+\begin_inset Quotes erd
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Subsection
