@@ -302,6 +302,25 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Inflation Rule
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Inflation-Rule"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
 \noindent
 \begin_inset ERT
 status open
@@ -337,22 +356,17 @@ status open
 \end_layout
 
 \begin_layout Plain Layout
-\begin_inset Caption Standard
-
-\begin_layout Plain Layout
-Inflation Rule
-\begin_inset CommandInset label
-LatexCommand label
-name "fig:Inflation-Rule"
-
+From the top left:
+\begin_inset Newline newline
 \end_inset
 
-
+False Triangle, True Triangle, Red-Blue Square, Variant Red-Blue Square,
+ Red Square
 \end_layout
 
-\end_inset
-
-
+\begin_layout Plain Layout
+The bottom right spot shows the evolution of red/blue, true/false edges
+ after the second subdivision step
 \end_layout
 
 \end_inset
@@ -475,6 +489,55 @@ trueness
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+True and False edges and their spanning graphs
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Trueness Graph.svg
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection

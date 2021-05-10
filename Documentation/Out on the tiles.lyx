@@ -355,6 +355,20 @@ status open
 
 \end_layout
 
+\begin_layout Plain Layout
+From the top left:
+\begin_inset Newline newline
+\end_inset
+
+False Triangle, True Triangle, Red-Blue Square, Variant Red-Blue Square,
+ Red Square
+\end_layout
+
+\begin_layout Plain Layout
+The bottom right spot shows the evolution of red/blue, true/false edges
+ after the second subdivision step
+\end_layout
+
 \end_inset
 
 
@@ -461,12 +475,20 @@ false
  or any kind of square, but only through one of the square's true edges.
  At the same time, the exact opposite applies to false triangles.
  Figure 
-\color red
-[insert picture]
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:True-and-False-Graphs"
+plural "false"
+caps "false"
+noprefix "false"
+
+\end_inset
+
+ sh
 \color black
- shows how this rule induces, onto the tiling, two distinct graphs, whose
- nodes are the center point of the triangular tiles, and whose edges cross
- squares from side to side in accordance to their 
+ows how this rule induces, onto the tiling, two distinct graphs, whose nodes
+ are the center point of the triangular tiles, and whose edges cross squares
+ from side to side in accordance to their 
 \begin_inset Quotes eld
 \end_inset
 
@@ -475,6 +497,62 @@ trueness
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+True and False edges and their spanning graphs
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:True-and-False-Graphs"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Trueness Graph.svg
+	width 80text%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\noindent
+\align center
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
