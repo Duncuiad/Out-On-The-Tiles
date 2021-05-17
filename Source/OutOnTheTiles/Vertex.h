@@ -23,8 +23,12 @@ class OUTONTHETILES_API UVertex : public UObject
 	 */
 	bool marked;
 
-public:
+	/**
+	* Stores this vertex's position on the plane
+	*/
 	FVector2D position;
+
+public:
 
 	/**
 	 * Get and set for marked vertex information

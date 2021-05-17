@@ -16,7 +16,9 @@ class UVertex; //#include "Vertex.h"
 class UHalfEdge; //#include "HalfEdge.h"
 
 /**
- * 
+ * A class for the faces in the tiling
+ * Each face keeps references to its father and children in the subdivision tree,
+ * as well as to one of its half-edges
  */
 UCLASS()
 class OUTONTHETILES_API UFace : public UObject

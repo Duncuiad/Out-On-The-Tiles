@@ -12,8 +12,8 @@ class UFace; //#include "Face.h"
 
 /**
  * A class for the half-edges (HE) in the tiling (stored as a half-edge mesh)
- * It stores topological information as the base vertex, the next half-edge on the same face and the opposite half-edge (same edge, other face) if present
- * It also stores the color of the half edge (red/blue), which is needed to determine how to subdivide the tiling
+ * It stores topological information, such as the base vertex, the next half-edge on the same face and the opposite half-edge (same edge, other face) if present
+ * It also stores the color of the half edge (red/blue) and its "trueness", which are needed to determine how to subdivide the tiling
  */
 UCLASS()
 class OUTONTHETILES_API UHalfEdge : public UObject

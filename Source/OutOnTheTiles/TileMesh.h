@@ -17,7 +17,9 @@
 #include "TileMesh.generated.h"
 
 /**
- * 
+ * The class for the tile mesh, which is the structure responsible for storing and managing the world's tile domains
+ * It provides methods for accessing the root face (the one enclosing the whole world) and for subdividing a given face
+ * It also provides useful constants for calculations
  */
 UCLASS()
 class OUTONTHETILES_API UTileMesh : public UObject
